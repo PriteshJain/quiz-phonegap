@@ -1,0 +1,98 @@
+{
+  "questions": [ 
+       {
+           "question": "True or False: Java is a strongly typed language.",
+           "answers": ["True", "False"],
+       	   "correctAnswer": 1
+       },
+       {
+           "question": "In Java Strings are primitive types.",
+           "answers": ["True", "False"],
+       	   "correctAnswer": 2
+       },
+       {
+           "question": "Which of the following refers to creating an object using the keyword \"new\"?",
+           "answers": ["assignment", "instantiation", "declaration", "iteration"],
+       	   "correctAnswer": 2
+       },
+       {
+           "question": "Which of the following is not a primitive type?",
+           "answers": ["int", "char", "Float", "byte"],
+       	   "correctAnswer": 3
+       },
+       {
+           "question": "True or False: Java Strings are immutable.",
+           "answers": ["True", "False"],
+       	   "correctAnswer": 1
+       },
+       {
+           "question": "What is variable declaration?",
+           "answers": ["instantiating a class", "retrieving a return value from a method", "creating a primitive type variable", "stating a variable type and name"],
+       	   "correctAnswer": 4
+       },
+       {
+           "question": "What is the number 5 in this code: System.out.println(\"amount: \"+5);",
+           "answers": ["a constant", "a variable", "a literal", "an object"],
+       	   "correctAnswer": 3
+       },
+       {
+           "question": "Which of the following primitive types can only have two possible values?",
+           "answers": ["byte", "char", "boolean", "short"],
+       	   "correctAnswer": 3
+       },
+       {
+           "question": "Which of the following represents \"or\" in Java logic?",
+           "answers": ["+=", "&&", "!", "||"],
+       	   "correctAnswer": 4
+       },
+       {
+           "question": "Which of the following ends an infinite for loop?",
+           "answers": ["stop();", "end;", "break;", "exit();"],
+       	   "correctAnswer": 3
+       },
+       {
+           "question": "What will this conditional test return if the value of \"num\" is 0: if((num>1) || (num>=0 && num<10))",
+           "answers": ["True", "False", "null", "zero"],
+       	   "correctAnswer": 1
+       },
+       {
+           "question": "When does an else statement execute?",
+           "answers": ["when at least one preceding \"if\" or \"else if\" statement has returned false", 
+           "when all preceding \"if\" and \"else if\" statements have returned true", 
+           "always, regardless of what previous statements have returned", 
+           "when all preceding \"if\" and \"else if\" statements have returned false"],
+       	   "correctAnswer": 4
+       },
+       {
+           "question": "What are the additive operators (plus signs) doing here: i++;",
+           "answers": ["assigning", "concatenating", "incrementing", "decrementing"],
+       	   "correctAnswer": 3
+       },
+       {
+           "question": "What does the \"%\" operator return in Java arithmetic?",
+           "answers": ["percentage", "remainder", "product", "factor"],
+       	   "correctAnswer": 2
+       },
+       {
+           "question": "What must \"a\" be here: while(a)",
+           "answers": ["a number greater than or equal to zero", "an object reference", 
+           "an expression that returns a value of true or false", "a primitive type variable"],
+       	   "correctAnswer": 3
+       },
+       {
+           "question": "Which of the following always starts an infinite while loop?",
+           "answers": ["while(true) ", "while(num<0)", "while(;;)", "while(count==0)"],
+       	   "correctAnswer": 1
+       },
+       {
+           "question": "How many times will the following for loop execute: for(int i=0; i<=10; i++) { System.out.println(i); }",
+           "answers": ["10", "11", "1", "0"],
+       	   "correctAnswer": 2
+       },
+       {
+           "question": "Which of the following data types cannot be used as the expression in a switch statement?",
+           "answers": ["char", "Integer", "short", "Object"],
+       	   "correctAnswer": 4
+       } 
+     ]
+ }

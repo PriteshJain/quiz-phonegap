@@ -1,0 +1,29 @@
+ 
+ li.selected {
+      background: #6fb2e5;
+      box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+      -o-box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+      -webkit-box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+      -moz-box-shadow: 0 1px 5px #0061aa, inset 0 10px 20px #b6f9ff;
+  }
+  
+
+  .small-button {
+    /*width: 100px;*/
+    /*height: 35px;*/
+    /*position:absolute;*/
+    /*right:10px;*/
+    /*background:#77D125;*/
+    /*box-shadow: 0 1px 5px #3CAA00, inset 0 10px 20px #C9FFB6;*/
+    /*-o-box-shadow: 0 1px 5px #3caa00, inset 0 10px 20px #c9ffb6;*/
+    /*-webkit-box-shadow: 0 1px 5px #3CAA00, inset 0 10px 20px #C9FFB6;*/
+    /*-moz-box-shadow: 0 1px 5px #3caa00, inset 0 10px 20px #c9ffb6;*/
+    /*border: 1px solid #5FDB0C;*/
+  }
+
+ 
+  
+  .error-display {
+    text-align:center;
+    color: red;
+  }
