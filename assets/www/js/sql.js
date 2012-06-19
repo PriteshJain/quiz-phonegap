@@ -8,28 +8,19 @@
 var quizy = [];
 var db;
 var dbCreated = false;
-var currentQuestion=-1;
+
 
 window.localStorage.setItem('currentQuestion',-1);
+window.localStorage.setItem('selectedAnswer',-1);
 
 function sql()
 {
-
-
-//	var dbobj = onDeviceReady();
     var dbobj = getDatabase();
     //Local Database Object
     this.databaseobj = dbobj;
 
-
-    //myScrollDetail = new iScroll('wrapperDetail', { hScrollbar: false, vScrollbar: false });
-    //myScrollList = new iScroll('wrapperList', { hScrollbar: false, vScrollbar: false });
-    //myScrollSearch = new iScroll('wrapperSearch', { hScrollbar: false, vScrollbar: false });
-
     //check rows
     dbobj.transaction(checkRows,databaseNotSetup);
-
-
 }
 
 //function onDeviceReady()
@@ -65,7 +56,6 @@ function getDatabase()
 function checkRows(tx)
 {
     var sql = "select count(*) as countall from QuizDB";
-
     tx.executeSql(sql, [], getCount_success);
 }
 
@@ -89,7 +79,6 @@ function getCount_success(tx, results)
 function databaseNotSetup(tx, error) {
     $('#busy').hide();
     readJsonFile();
-    // alert("databaseNotSetup: " + error);
 }
 
 
@@ -130,6 +119,7 @@ function populateQuizTable(tx) {
 
 
     var questions ;
+    total_questions = quizy.length
     for (var i=0; i < quizy.length; i++)
     {
         var myquestion = new Object();
@@ -180,7 +170,7 @@ function populateDB_success() {
 
 function getQuestions(tx)
 {
-    var sql = "select * from QuizTable"; // where id = " + (window.localStorage.getItem("currentQuestion"));
+    var sql = "select * from QuizTable"; 
     tx.executeSql(sql, [], getQuestions_success);
 }
 
@@ -188,38 +178,69 @@ function getQuestions_success(tx,results)
 {
     var len = results.rows.length;
 
-    for(var question_no=0;question_no<len; question_no ++)
+    for(var question_no=1;question_no<=len; question_no++)
     {
-        var quest = results.rows.item(question_no);
+        var quest = results.rows.item(question_no-1);
         answers =quest.answers.split(",");
         var quest_div = "" +
-            '<div data-role="page" data-dom-cache="true" id="quest' + (question_no) + '">' +
+            '<div data-role="page" data-dom-cache="true" id="quest' + question_no + '">' +
             '<div data-role="header">'+
             '<h1> Java Quiz</h1> ' +
             '</div>' +
             '<div data-role="content">' +
-            '<p>' +  (question_no + 1 ) +  ". " +  quest.question + '</p>' +
+            '<p>' +  question_no  +  ". " +  quest.question + '</p>' +
             '<ul data-role="listview" class="answers" id="quest' + question_no + '-list" question-no='  + question_no +'>';
         for(var i=0;i<answers.length;i++)
         {
-            quest_div =  quest_div  + '<li  data-question-no="'+ question_no + '" data-answer-no="' +  (i+1) + '" >' + answers[i] + '</li>';
+            quest_div =  quest_div  + '<li  data-question-no="'+ question_no  + '" data-answer-no="' +  (i+1) + '" >' + answers[i] + '</li>';
         }
         quest_div = quest_div +
             '</ul><p><br/></p>';
 
-
         quest_div = quest_div + "" +
-            '<a href="#" data-question-no="'+(question_no + 1) +'" class="small-button" data-theme="c" data-role="button">' +
+            '<a href="#"  data-transition="slidedown" data-icon="arrow-r"  data-iconpos="right" data-question-no="'+question_no  +'" class="small-button" data-theme="c" data-role="button">' +
             'Next</a>' +
-            '<span id="error-display-' +  (question_no + 1) + '"></span>' +
+
+            '<span id="error-display-' +  question_no + '"></span>' +
             '</div> ' +
             '</div>';
-//
         $("body").append(quest_div);
     }
-//        $('#quest p.question').text(quest.question);
-//        for(i=0;i<answers.length;i++)
-//        {
-//            $('#quest ul').append('<li data-question-no="'+ window.localStorage.getItem("currentQuestion") + '" data-answer-no="' +  (i+1) + '">' + answers[i] + "</li>");
-//        }
+
+}
+
+function checkResults(tx) {
+        var query = "select count(*) as count from QuizResultTable where selected_answer = 1";
+        var res  = tx.executeSql(query,[], checkResultsSuccess);    
+}
+
+function checkResultsSuccess(tx,results) {
+    var result = results.rows.item(0).count
+    $('#result-answers').text(" " + result + " / " + total_questions);
+}
+
+ 
+
+
+function updateSelectedAnswer(tx) {
+        var q_no = window.localStorage.getItem("currentQuestion");
+        var query = "select correct_answer from Quiztable where id = " + (q_no);
+        var res  = tx.executeSql(query,[], updateSelectedAnswerSuccess);    
+}
+
+
+function updateSelectedAnswerSuccess(tx,results)  {
+    var selected_answer = window.localStorage.getItem("selectedAnswer");
+    var q_no = window.localStorage.getItem("currentQuestion");
+    if (results.rows.length > 0 ) {
+        var correct_answer = results.rows.item(0).correct_answer;
+        var query = "";
+        if (correct_answer == selected_answer) {
+            query = "UPDATE QuizResultTable set selected_answer = 1 where question_no=" + q_no ;
+        }
+        else {
+            query = "UPDATE QuizResultTable set selected_answer = 0 where question_no=" + q_no ;
+        }
+        tx.executeSql(query);        
+    }
 }

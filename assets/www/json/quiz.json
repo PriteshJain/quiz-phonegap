@@ -59,7 +59,7 @@
            "question": "When does an else statement execute?",
            "answers": ["when at least one preceding \"if\" or \"else if\" statement has returned false", 
            "when all preceding \"if\" and \"else if\" statements have returned true", 
-           "always, regardless of what previous statements have returned", 
+           "always regardless of what previous statements have returned", 
            "when all preceding \"if\" and \"else if\" statements have returned false"],
        	   "correctAnswer": 4
        },

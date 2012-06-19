@@ -14,145 +14,84 @@
     <script type="text/javascript" charset="utf-8"  src="js/sql.js"></script>
 
     <script type="text/javascript"  charset="utf-8">
+    
+    var total_questions=0;
+    var currentQuestion=-1;
 
-
-        $.mobile.page.prototype.options.domCache= true;
-        $(document).ready(function () {
-                getNextQuestion();
-        });
-
-
-        function getNextQuestion() {
-            $(".small-button").live("click",function(event) {
-                currentQuestion =
-                        parseInt(window.localStorage.getItem('currentQuestion'),10)+ 1;
-                window.localStorage.setItem("currentQuestion",currentQuestion);
-                $.mobile.changePage("#quest" + currentQuestion);
-            });
-        }
-
-        $('li').live('click', function(){
-            $(this).siblings().removeClass('selected');
-            $(this).addClass('selected');
-        });
-
-        // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
-        //  window.addEventListener('load', function () {
-
-
+    $.mobile.page.prototype.options.domCache= true;
+    
+    $('li').live('click', function(){
+        $(this).siblings().removeClass('selected');
+        $(this).addClass('selected');
+    });
         function onDeviceReady() {
             sql();
-            currentQuestion =
-                    parseInt(window.localStorage.getItem('currentQuestion'),10);
+            currentQuestion = parseInt(window.localStorage.getItem('currentQuestion'),10);
             window.localStorage.setItem("currentQuestion",currentQuestion + 1);
             db.transaction(getQuestions, transaction_error);
         }
 
 
+    $('.small-button').live('click', function(e) {
+        var q_no = parseInt($(this).attr('data-question-no'),10);
+        window.localStorage.setItem("currentQuestion",q_no -1);
+        var selected_answer =$("#quest"+ (q_no) + " li.selected");
+        
 
-        //        $(document).ready(function () {
-        //
-        //            $("div").on("click","a", function(e) {
-        //            var selected_answer =$("li.selected","#quest");
-        //            console.log(selected_answer);
-        //            e.preventDefault();
-        //            return false;
-        //        });
-        //        });
+        if(selected_answer.length === 0)
+        {
+            e.preventDefault();
+            $('#error-display-'+ q_no).text("Please select a choice");
+            return false;
+        }
+        else
+        { 
+            var answer = selected_answer.attr("data-answer-no");
+            window.localStorage.setItem("selectedAnswer",answer);
+            db.transaction(updateSelectedAnswer,transaction_error);
+            if(q_no == total_questions)
+            {
+                db.transaction(checkResults,transaction_error);
+                $.mobile.changePage("#finish")
+            }
+            else 
+            {
+                $('#error-display-' + q_no).text("");
+                $.mobile.changePage("#quest" + (q_no +  1))
+            }
+        }
+    });
 
+    // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
+    // document.addEventListener('deviceready', onDeviceReady(), false);
 
-
-        //                $('#submit-next').bind('click', function(e) {
-        //
-        //        //            var q_no = parseInt($(this).attr('data-question-no'),10);
-        //
-        //                    var selected_answer =$("li.selected","#quest");
-        ////                    console.log(selected_answer);
-        //                    if(selected_answer.length === 0)
-        //                    {
-        //                        e.preventDefault();
-        //                        $('#error-display-' + q_no).text("Please select a choice");
-        //                        return false;
-        //                    }
-        //                    else
-        //                    {
-        //                        var correct_answer= init.questions[q_no-1].correctAnswer;
-        //                        console.log("correct_answer");
-        //                        console.log(jQuery.inArray((q_no-1),answered_questions));
-        //                        console.log(selected_answer.attr('data-answer-no') == correct_answer);
-        //                        if(jQuery.inArray((q_no-1),answered_questions) != -1)
-        //                        {
-        //                            if(selected_answer.attr('data-answer-no') == correct_answer )
-        //                            {
-        //                                console.log("correct_answer-true");
-        //                                correct_answers = correct_answers + 1;
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            if(selected_answer.attr('data-answer-no') == correct_answer )
-        //                            {
-        //                                console.log("correct_answer-true");
-        //                                correct_answers = correct_answers + 1;
-        //                            }
-        //                            else
-        //                            {
-        //                                console.log("correct_answer-false");
-        //                                correct_answers = correct_answers - 1;
-        //                            }
-        //                        }
-        //
-        //                        $('p.result-answers').text(correct_answers + "/" + total_questions);
-        //                        var next =  q_no < total_questions ? ("quest" + (q_no + 1)) : "finish" ;
-        //                        $('#error-display').text(" ");
-        //                        location = default_location + "#" + next ;
-        //                    }
-        //                });
-
-        document.addEventListener('deviceready', onDeviceReady(), false);
-
-
-    </script>
+</script>
 </head>
-
-<body>
-<div data-role="page" id="start">
-    <div data-role="header">
-        <h1>Quiz</h1>
-    </div>
-    <div data-role="content" >
-        <p>Quiz on PhoneGap</p>
-        <div class="intro-container slide-container"  style="display: block;">
-            <p>Let's get started!</p>
-            <p><a href="#quest1" class="nav-start" data-role="button">Start</a></p>
+<body onload="onDeviceReady()">
+    <div data-role="page" id="start">
+        <div data-role="header">
+            <h1>Quiz</h1>
+        </div>
+        <div data-role="content" >
+            <p>Quiz on PhoneGap</p>
+            <div class="intro-container slide-container"  style="display: block;">
+                <p>Let's get started!</p>
+                <p><a href="#quest1" class="nav-start" data-role="button">Start</a></p>
+            </div>
         </div>
     </div>
-</div>
 
-<!--<div data-role="page" class="questions" id="quest" >-->
-    <!--<div data-role="header">-->
-        <!--<h1> Java Quiz</h1>-->
-    <!--</div>-->
-    <!--<div data-role="content" >-->
-        <!--<p  class="question"></p>-->
-        <!--<ul data-role="listview" data-theme="c" class="answers" id="ul-quest">-->
-        <!--</ul>-->
-        <!--<a href="#" class="small-button" data-theme="c" data-role="button">Next</a>-->
-        <!--<span id="error-display"></span>-->
-    <!--</div>-->
-<!--</div>-->
-
-<div data-role="page" id="finish">
-    <div data-role="header">
-        <h1>Quiz Result</h1>
-    </div>
-    <div data-role="content" >
-        <div class="intro-container slide-container"  style="display: block;">
-            <p>Result:  </p>
-            <p class="result-answers">
-            </p>
+    <div data-role="page" id="finish">
+        <div data-role="header">
+            <h1>Quiz Result</h1>
+        </div>
+        <div data-role="content" >
+            <div class="intro-container slide-container"  style="display: block;">
+                <p>Result:  </p>
+                <p id="result-answers">
+                </p>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
